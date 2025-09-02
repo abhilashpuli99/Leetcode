@@ -1,0 +1,36 @@
+// Last updated: 9/2/2025, 1:43:08 PM
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     struct ListNode *next;
+ * };
+ */
+struct ListNode *detectCycle(struct ListNode *head) {
+    struct ListNode *slow = head;
+    struct ListNode *fast = head;
+    
+    if (!head || !head->next) {
+        return NULL;
+    }
+
+    // Apply floyd's algorithm to find the cycle entrance:
+    // 1. Find the intersection point of the two runners.
+    do {
+        slow = slow->next;
+        fast = fast->next->next;
+    } while (fast != slow && fast && fast->next);
+
+    if (!fast) {
+        return NULL;
+    }
+
+    // 2. Find the "entrance" to the cycle.
+    slow = head;
+    while (slow != fast && slow && fast) {
+        slow = slow->next;
+        fast = fast->next;
+    }
+
+    return fast;    
+}
